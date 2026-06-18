@@ -17,9 +17,9 @@ const orbitron = Orbitron({
 });
 
 export const metadata: Metadata = {
-  title: "Alex Chen | SQA Engineer Portfolio",
+  title: "Rao Muhammad Ali | SQA Engineer Portfolio",
   description:
-    "Senior Software Quality Assurance Engineer specializing in test automation, performance testing, and quality-driven development. Explore my projects, skills, and experience.",
+    "Senior Software Quality Assurance Engineer Rao Muhammad Ali specializing in test automation, performance testing, and quality-driven development. Explore my projects, skills, and experience.",
   keywords: [
     "SQA Engineer",
     "Software Quality Assurance",
@@ -29,11 +29,11 @@ export const metadata: Metadata = {
     "Cypress",
     "Performance Testing",
   ],
-  authors: [{ name: "Alex Chen" }],
+  authors: [{ name: "Rao Muhammad Ali" }],
   openGraph: {
-    title: "Alex Chen | SQA Engineer Portfolio",
+    title: "Rao Muhammad Ali | SQA Engineer Portfolio",
     description:
-      "Senior SQA Engineer — test automation, performance testing, and quality-driven development.",
+      "Rao Muhammad Ali — Senior SQA Engineer specializing in test automation, performance testing, and quality-driven development.",
     type: "website",
   },
 };

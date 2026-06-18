@@ -28,13 +28,13 @@ export type Experience = {
 
 // ─── Brand Constants ────────────────────────────────────────────────────────
 export const BRAND = {
-  name: "Alex Chen",
+  name: "Rao Muhammad Ali",
   title: "SQA Engineer",
   tagline: "Crafting Quality at Every Layer of the Stack",
-  email: "alex.chen@sqaengineer.dev",
-  github: "https://github.com/alexchen-sqa",
-  linkedin: "https://linkedin.com/in/alexchen-sqa",
-  twitter: "https://twitter.com/alexchen_sqa",
+  email: "rao.muhammadali@sqaengineer.dev",
+  github: "https://github.com/raomuhammadali-sqa",
+  linkedin: "https://linkedin.com/in/raomuhammadali-sqa",
+  twitter: "https://twitter.com/raomuhammadali_sqa",
   location: "San Francisco, CA",
   available: true,
 } as const;

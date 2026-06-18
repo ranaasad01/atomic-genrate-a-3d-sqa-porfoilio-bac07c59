@@ -18,7 +18,7 @@ const publications = [
   {
     id: 1,
     title: "Automated Regression Testing in Microservices: A Systematic Approach",
-    authors: "Alex Chen, Sarah Kim, David Park",
+    authors: "Rao Muhammad Ali, Sarah Kim, David Park",
     venue: "IEEE Software Testing Conference 2024",
     year: "2024",
     category: "Research Paper",
@@ -31,7 +31,7 @@ const publications = [
   {
     id: 2,
     title: "Shift-Left Testing: Integrating QA from Day One",
-    authors: "Alex Chen",
+    authors: "Rao Muhammad Ali",
     venue: "Medium – QA Engineering Blog",
     year: "2024",
     category: "Technical Article",
@@ -44,7 +44,7 @@ const publications = [
   {
     id: 3,
     title: "Performance Testing at Scale: Lessons from 50k Concurrent Users",
-    authors: "Alex Chen, Mike Torres",
+    authors: "Rao Muhammad Ali, Mike Torres",
     venue: "SREcon 2023",
     year: "2023",
     category: "Conference Talk",
@@ -57,7 +57,7 @@ const publications = [
   {
     id: 4,
     title: "AI-Powered Test Generation: Opportunities and Pitfalls",
-    authors: "Alex Chen",
+    authors: "Rao Muhammad Ali",
     venue: "Dev.to – Testing & QA",
     year: "2023",
     category: "Technical Article",
@@ -70,7 +70,7 @@ const publications = [
   {
     id: 5,
     title: "Zero-Defect Banking: A QA Case Study in Fintech",
-    authors: "Alex Chen, Priya Nair",
+    authors: "Rao Muhammad Ali, Priya Nair",
     venue: "Journal of Software Quality Assurance, Vol. 12",
     year: "2023",
     category: "Case Study",
@@ -83,7 +83,7 @@ const publications = [
   {
     id: 6,
     title: "BDD in Practice: Bridging the Gap Between Business and Engineering",
-    authors: "Alex Chen",
+    authors: "Rao Muhammad Ali",
     venue: "Agile Alliance Conference 2022",
     year: "2022",
     category: "Conference Talk",
@@ -96,455 +96,350 @@ const publications = [
   {
     id: 7,
     title: "Security Testing Automation with OWASP ZAP in DevSecOps",
-    authors: "Alex Chen, James Liu",
+    authors: "Rao Muhammad Ali, James Liu",
     venue: "OWASP AppSec Global 2022",
     year: "2022",
     category: "Research Paper",
     abstract:
-      "Presents an automated security testing pipeline integrating OWASP ZAP into DevSecOps workflows, enabling continuous vulnerability scanning with sub-5-minute feedback loops without sacrificing coverage.",
-    tags: ["Security Testing", "OWASP ZAP", "DevSecOps", "CI/CD"],
+      "Presents a framework for integrating OWASP ZAP automated security scans into DevSecOps pipelines, reducing critical CVEs from 14 to 0 within a single sprint and establishing continuous security regression baselines.",
+    tags: ["Security Testing", "OWASP ZAP", "DevSecOps", "CVE"],
     link: "#",
     featured: false,
   },
   {
     id: 8,
-    title: "The True Cost of Technical Debt in QA: A Quantitative Analysis",
-    authors: "Alex Chen",
-    venue: "Towards Data Science",
+    title: "The QA Engineer's Guide to Observability",
+    authors: "Rao Muhammad Ali",
+    venue: "Hashnode – Engineering Excellence",
     year: "2022",
     category: "Technical Article",
     abstract:
-      "A data-driven examination of how accumulated test debt compounds over time, with a quantitative model for measuring its impact on release velocity, defect escape rate, and engineering morale.",
-    tags: ["Technical Debt", "Metrics", "QA Strategy", "Data Analysis"],
+      "Explores how QA engineers can leverage distributed tracing, structured logging, and metrics dashboards to proactively detect quality regressions in production before users are impacted.",
+    tags: ["Observability", "Tracing", "Monitoring", "Production QA"],
     link: "#",
     featured: false,
   },
 ];
 
-// ─── Category Color Helper ────────────────────────────────────────────────────
-function getCategoryColor(category: string) {
-  switch (category) {
-    case "Research Paper":
-      return {
-        border: "border-[#00f5ff]/40",
-        text: "text-[#00f5ff]",
-        bg: "bg-[#00f5ff]/10",
-      };
-    case "Technical Article":
-      return {
-        border: "border-[#7b2fff]/40",
-        text: "text-[#7b2fff]",
-        bg: "bg-[#7b2fff]/10",
-      };
-    case "Case Study":
-      return {
-        border: "border-[#ff2d78]/40",
-        text: "text-[#ff2d78]",
-        bg: "bg-[#ff2d78]/10",
-      };
-    case "Conference Talk":
-      return {
-        border: "border-green-400/40",
-        text: "text-green-400",
-        bg: "bg-green-400/10",
-      };
-    default:
-      return {
-        border: "border-white/20",
-        text: "text-white",
-        bg: "bg-white/10",
-      };
-  }
-}
+const categories = ["All", "Research Paper", "Technical Article", "Conference Talk", "Case Study"];
 
-// ─── Filter Categories ────────────────────────────────────────────────────────
-const FILTER_CATEGORIES = [
-  "All",
-  "Research Paper",
-  "Technical Article",
-  "Case Study",
-  "Conference Talk",
-];
+const categoryColors: Record<string, string> = {
+  "Research Paper": "text-[#00f5ff] border-[#00f5ff]/40 bg-[#00f5ff]/10",
+  "Technical Article": "text-[#7b2fff] border-[#7b2fff]/40 bg-[#7b2fff]/10",
+  "Conference Talk": "text-[#ff2d78] border-[#ff2d78]/40 bg-[#ff2d78]/10",
+  "Case Study": "text-green-400 border-green-400/40 bg-green-400/10",
+};
 
-// ─── Stats Data ───────────────────────────────────────────────────────────────
-const stats = [
-  { label: "Publications", value: "8+", icon: BookOpen },
-  { label: "Conferences", value: "4", icon: Award },
-  { label: "Journals & Platforms", value: "3", icon: FileText },
-];
-
-// ─── Publication Card ─────────────────────────────────────────────────────────
-function PublicationCard({
-  pub,
-  showFeaturedBadge = false,
-}: {
-  pub: (typeof publications)[0];
-  showFeaturedBadge?: boolean;
-}) {
-  const colors = getCategoryColor(pub.category);
-
-  return (
-    <motion.div
-      variants={scaleIn}
-      whileHover={{
-        scale: 1.02,
-        borderColor: "rgba(0,245,255,0.3)",
-      }}
-      className="relative bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex flex-col gap-4 transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(0,245,255,0.08)] group"
-    >
-      {/* Featured badge */}
-      {showFeaturedBadge && pub.featured && (
-        <span className="absolute top-4 right-4 text-xs font-orbitron font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-[#00f5ff]/20 to-[#7b2fff]/20 border border-[#00f5ff]/30 text-[#00f5ff]">
-          ★ Featured
-        </span>
-      )}
-
-      {/* Top row: category badge + year */}
-      <div className="flex items-center justify-between gap-2 flex-wrap">
-        <span
-          className={`text-xs font-semibold px-3 py-1 rounded-full border ${
-            colors.border
-          } ${colors.text} ${colors.bg}`}
-        >
-          {pub.category}
-        </span>
-        <span className="flex items-center gap-1 text-xs text-gray-400">
-          <Calendar className="w-3 h-3" />
-          {pub.year}
-        </span>
-      </div>
-
-      {/* Title */}
-      <h3 className="font-orbitron text-white text-base font-bold leading-snug group-hover:text-[#00f5ff] transition-colors duration-200">
-        {pub.title}
-      </h3>
-
-      {/* Authors */}
-      <p className="text-gray-400 text-sm">{pub.authors}</p>
-
-      {/* Venue */}
-      <p className="text-[#00f5ff] text-sm font-medium">{pub.venue}</p>
-
-      {/* Abstract */}
-      <p className="text-gray-300 text-sm leading-relaxed line-clamp-3">
-        {pub.abstract}
-      </p>
-
-      {/* Tags */}
-      <div className="flex flex-wrap gap-1.5">
-        {pub.tags.map((tag) => (
-          <span
-            key={tag}
-            className="bg-white/10 text-xs text-gray-300 rounded-full px-2 py-0.5"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* Read More */}
-      <div className="mt-auto pt-2 border-t border-white/5">
-        <Link
-          href={pub.link}
-          className="inline-flex items-center gap-2 text-sm text-[#00f5ff] hover:text-white transition-colors duration-200 group/link"
-        >
-          <ExternalLink className="w-4 h-4 group-hover/link:scale-110 transition-transform" />
-          <span className="font-medium">Read More</span>
-        </Link>
-      </div>
-    </motion.div>
-  );
-}
-
-// ─── Page Component ───────────────────────────────────────────────────────────
 export default function PublicationsPage() {
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredPublications =
-    activeFilter === "All"
-      ? publications
-      : publications.filter((p) => p.category === activeFilter);
+  const filtered = publications.filter((pub) => {
+    const matchesCategory = activeCategory === "All" || pub.category === activeCategory;
+    const q = searchQuery.toLowerCase();
+    const matchesSearch =
+      !q ||
+      pub.title.toLowerCase().includes(q) ||
+      pub.authors.toLowerCase().includes(q) ||
+      pub.tags.some((t) => t.toLowerCase().includes(q)) ||
+      pub.abstract.toLowerCase().includes(q);
+    return matchesCategory && matchesSearch;
+  });
 
-  const featuredPublications = publications.filter((p) => p.featured);
+  const featured = publications.filter((p) => p.featured);
 
   return (
-    <div className="min-h-screen bg-[#0f0f1a] text-white overflow-x-hidden">
-      {/* ── Hero Section ──────────────────────────────────────────────────── */}
-      <section className="relative min-h-[40vh] flex flex-col items-center justify-center pt-28 pb-16 px-4 overflow-hidden">
-        {/* Neon grid background */}
+    <div className="min-h-screen bg-[#0f0f1a] text-white">
+      {/* ── Hero ── */}
+      <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Background glows */}
         <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(0,245,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.15) 1px, transparent 1px)",
-              backgroundSize: "60px 60px",
-            }}
-          />
+          <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#00f5ff]/5 rounded-full blur-3xl" />
+          <div className="absolute top-40 right-1/4 w-80 h-80 bg-[#7b2fff]/5 rounded-full blur-3xl" />
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(0,245,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,245,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
         </div>
 
-        {/* Gradient orbs */}
-        <div className="absolute top-10 left-10 w-72 h-72 bg-[#00f5ff]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-10 right-10 w-72 h-72 bg-[#7b2fff]/10 rounded-full blur-3xl pointer-events-none" />
-
-        {/* Heading */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          animate="visible"
-          className="relative z-10 text-center"
-        >
-          <motion.div variants={fadeInUp} className="flex items-center justify-center gap-3 mb-4">
-            <BookOpen className="w-8 h-8 text-[#00f5ff]" />
-            <span className="text-[#00f5ff] font-orbitron text-sm tracking-widest uppercase">
-              {BRAND.name}
-            </span>
-          </motion.div>
-
-          <motion.h1
-            variants={fadeInUp}
-            className="font-orbitron text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-4"
-            style={{
-              textShadow: "0 0 40px rgba(0,245,255,0.4), 0 0 80px rgba(0,245,255,0.15)",
-            }}
-          >
-            <span className="text-white">Publi</span>
-            <span className="text-[#00f5ff]">cations</span>
-          </motion.h1>
-
-          <motion.p
-            variants={fadeInUp}
-            className="text-gray-400 text-lg md:text-xl max-w-xl mx-auto"
-          >
-            Research, Articles &amp; Technical Writings
-          </motion.p>
-        </motion.div>
-      </section>
-
-      {/* ── Stats Bar ─────────────────────────────────────────────────────── */}
-      <section className="relative z-10 max-w-4xl mx-auto px-4 mb-12">
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-4"
-        >
-          {stats.map((stat) => (
-            <motion.div
-              key={stat.label}
-              variants={scaleIn}
-              className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex flex-col items-center gap-2 hover:border-[#00f5ff]/30 transition-colors duration-300"
-            >
-              <stat.icon className="w-7 h-7 text-[#00f5ff]" />
-              <span
-                className="font-orbitron text-3xl font-black text-white"
-                style={{ textShadow: "0 0 20px rgba(0,245,255,0.5)" }}
-              >
-                {stat.value}
-              </span>
-              <span className="text-gray-400 text-sm text-center">{stat.label}</span>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* ── Featured Publications ─────────────────────────────────────────── */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 mb-16">
-        <motion.div
-          variants={slideInLeft}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          className="flex items-center gap-3 mb-6"
-        >
-          <Award className="w-5 h-5 text-[#00f5ff]" />
-          <h2 className="font-orbitron text-xl font-bold text-white tracking-wide">
-            Featured Publications
-          </h2>
-          <div className="flex-1 h-px bg-gradient-to-r from-[#00f5ff]/30 to-transparent" />
-        </motion.div>
-
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {featuredPublications.map((pub) => (
-            <motion.div
-              key={pub.id}
-              variants={scaleIn}
-              whileHover={{
-                scale: 1.02,
-                borderColor: "rgba(0,245,255,0.3)",
-              }}
-              className="relative bg-white/5 backdrop-blur-md rounded-2xl p-6 flex flex-col gap-4 transition-shadow duration-300 hover:shadow-[0_0_40px_rgba(0,245,255,0.1)] group"
-              style={{
-                border: "1px solid transparent",
-                backgroundClip: "padding-box",
-                boxShadow: "inset 0 0 0 1px rgba(0,245,255,0.15), inset 0 0 0 1px rgba(123,47,255,0.1)",
-              }}
-            >
-              {/* Gradient border overlay */}
-              <div
-                className="absolute inset-0 rounded-2xl pointer-events-none"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(0,245,255,0.08) 0%, rgba(123,47,255,0.08) 100%)",
-                }}
-              />
-
-              {/* Featured badge */}
-              <span className="absolute top-4 right-4 text-xs font-orbitron font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-[#00f5ff]/20 to-[#7b2fff]/20 border border-[#00f5ff]/40 text-[#00f5ff] z-10">
-                ★ Featured
-              </span>
-
-              {/* Category + year */}
-              <div className="flex items-center justify-between gap-2 flex-wrap relative z-10">
-                <span
-                  className={`text-xs font-semibold px-3 py-1 rounded-full border ${
-                    getCategoryColor(pub.category).border
-                  } ${getCategoryColor(pub.category).text} ${
-                    getCategoryColor(pub.category).bg
-                  }`}
-                >
-                  {pub.category}
-                </span>
-                <span className="flex items-center gap-1 text-xs text-gray-400">
-                  <Calendar className="w-3 h-3" />
-                  {pub.year}
-                </span>
-              </div>
-
-              {/* Title */}
-              <h3 className="relative z-10 font-orbitron text-white text-base font-bold leading-snug group-hover:text-[#00f5ff] transition-colors duration-200">
-                {pub.title}
-              </h3>
-
-              {/* Authors */}
-              <p className="relative z-10 text-gray-400 text-sm">{pub.authors}</p>
-
-              {/* Venue */}
-              <p className="relative z-10 text-[#00f5ff] text-sm font-medium">
-                {pub.venue}
-              </p>
-
-              {/* Abstract */}
-              <p className="relative z-10 text-gray-300 text-sm leading-relaxed line-clamp-3">
-                {pub.abstract}
-              </p>
-
-              {/* Tags */}
-              <div className="relative z-10 flex flex-wrap gap-1.5">
-                {pub.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="bg-white/10 text-xs text-gray-300 rounded-full px-2 py-0.5"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* Read More */}
-              <div className="relative z-10 mt-auto pt-2 border-t border-white/5">
-                <Link
-                  href={pub.link}
-                  className="inline-flex items-center gap-2 text-sm text-[#00f5ff] hover:text-white transition-colors duration-200 group/link"
-                >
-                  <ExternalLink className="w-4 h-4 group-hover/link:scale-110 transition-transform" />
-                  <span className="font-medium">Read More</span>
-                </Link>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* ── Filter Bar ────────────────────────────────────────────────────── */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 mb-10">
-        <motion.div
-          variants={fadeIn}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-40px" }}
-          className="flex items-center gap-3 flex-wrap"
-        >
-          <Filter className="w-4 h-4 text-gray-400 shrink-0" />
-          {FILTER_CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveFilter(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 backdrop-blur-sm ${
-                activeFilter === cat
-                  ? "border-[#00f5ff] text-[#00f5ff] bg-[#00f5ff]/10 shadow-[0_0_12px_rgba(0,245,255,0.25)]"
-                  : "border-white/10 text-gray-400 bg-white/5 hover:border-white/30 hover:text-white"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* ── All Publications Grid ─────────────────────────────────────────── */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 pb-24">
-        <motion.div
-          variants={slideInLeft}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          className="flex items-center gap-3 mb-8"
-        >
-          <FileText className="w-5 h-5 text-[#7b2fff]" />
-          <h2 className="font-orbitron text-xl font-bold text-white tracking-wide">
-            All Publications
-          </h2>
-          <div className="flex-1 h-px bg-gradient-to-r from-[#7b2fff]/30 to-transparent" />
-          <span className="text-gray-400 text-sm">
-            {filteredPublications.length} result
-            {filteredPublications.length !== 1 ? "s" : ""}
-          </span>
-        </motion.div>
-
-        {filteredPublications.length > 0 ? (
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
-            key={activeFilter}
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="text-center"
           >
-            {filteredPublications.map((pub) => (
-              <PublicationCard key={pub.id} pub={pub} />
-            ))}
+            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#00f5ff]/30 bg-[#00f5ff]/5 text-[#00f5ff] text-sm font-medium mb-6">
+              <BookOpen className="w-4 h-4" />
+              Research & Writing
+            </motion.div>
+
+            <motion.h1
+              variants={fadeInUp}
+              className="font-orbitron text-4xl sm:text-5xl lg:text-6xl font-bold mb-6"
+            >
+              <span className="text-white">My </span>
+              <span className="bg-gradient-to-r from-[#00f5ff] to-[#7b2fff] bg-clip-text text-transparent">
+                Publications
+              </span>
+            </motion.h1>
+
+            <motion.p
+              variants={fadeInUp}
+              className="text-gray-400 text-lg max-w-2xl mx-auto mb-10"
+            >
+              Research papers, technical articles, and conference talks on software quality assurance,
+              test automation, and engineering excellence.
+            </motion.p>
+
+            {/* Stats */}
+            <motion.div
+              variants={staggerContainer}
+              className="flex flex-wrap justify-center gap-8 mb-12"
+            >
+              {[
+                { label: "Publications", value: publications.length },
+                { label: "Featured", value: featured.length },
+                { label: "Years Active", value: "3+" },
+                { label: "Topics", value: "12+" },
+              ].map((stat) => (
+                <motion.div key={stat.label} variants={scaleIn} className="text-center">
+                  <div className="font-orbitron text-3xl font-bold text-[#00f5ff]">{stat.value}</div>
+                  <div className="text-gray-400 text-sm mt-1">{stat.label}</div>
+                </motion.div>
+              ))}
+            </motion.div>
           </motion.div>
-        ) : (
+        </div>
+      </section>
+
+      {/* ── Featured ── */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             variants={fadeInUp}
             initial="hidden"
-            animate="visible"
-            className="flex flex-col items-center justify-center py-24 gap-4 text-center"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="flex items-center gap-3 mb-8"
           >
-            <Search className="w-12 h-12 text-gray-600" />
-            <p className="text-gray-400 text-lg font-medium">
-              No publications found for &ldquo;{activeFilter}&rdquo;
-            </p>
-            <button
-              onClick={() => setActiveFilter("All")}
-              className="text-[#00f5ff] text-sm hover:underline"
-            >
-              Clear filter
-            </button>
+            <Award className="w-5 h-5 text-[#00f5ff]" />
+            <h2 className="font-orbitron text-xl font-bold text-white">Featured Work</h2>
           </motion.div>
-        )}
+
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16"
+          >
+            {featured.map((pub) => (
+              <motion.div
+                key={pub.id}
+                variants={scaleIn}
+                whileHover={{ y: -6, scale: 1.02 }}
+                className="relative group rounded-2xl border border-[#00f5ff]/20 bg-gradient-to-br from-[#1a1a2e]/80 to-[#0f0f1a]/80 backdrop-blur-sm p-6 overflow-hidden cursor-pointer"
+              >
+                {/* Glow on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#00f5ff]/5 to-[#7b2fff]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00f5ff]/50 to-transparent" />
+
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-4">
+                    <span className={`text-xs font-medium px-3 py-1 rounded-full border ${categoryColors[pub.category] ?? "text-gray-400 border-gray-400/40 bg-gray-400/10"}`}>
+                      {pub.category}
+                    </span>
+                    <span className="text-gray-500 text-xs flex items-center gap-1">
+                      <Calendar className="w-3 h-3" />
+                      {pub.year}
+                    </span>
+                  </div>
+
+                  <h3 className="font-orbitron text-sm font-bold text-white mb-2 leading-snug group-hover:text-[#00f5ff] transition-colors">
+                    {pub.title}
+                  </h3>
+
+                  <p className="text-[#00f5ff] text-xs mb-3">{pub.authors}</p>
+                  <p className="text-gray-500 text-xs mb-3 italic">{pub.venue}</p>
+                  <p className="text-gray-400 text-xs leading-relaxed mb-4 line-clamp-3">{pub.abstract}</p>
+
+                  <div className="flex flex-wrap gap-1 mb-4">
+                    {pub.tags.slice(0, 3).map((tag) => (
+                      <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-[#7b2fff]/10 text-[#7b2fff] border border-[#7b2fff]/20">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <a
+                    href={pub.link}
+                    className="inline-flex items-center gap-1 text-xs text-[#00f5ff] hover:text-white transition-colors"
+                  >
+                    Read more <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
-      {/* ── Background decorations ────────────────────────────────────────── */}
-      <div className="fixed top-1/4 left-0 w-64 h-64 bg-[#00f5ff]/5 rounded-full blur-3xl pointer-events-none -z-0" />
-      <div className="fixed bottom-1/4 right-0 w-64 h-64 bg-[#7b2fff]/5 rounded-full blur-3xl pointer-events-none -z-0" />
+      {/* ── All Publications ── */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Search + Filter */}
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="flex flex-col sm:flex-row gap-4 mb-8"
+          >
+            {/* Search */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <input
+                type="text"
+                placeholder="Search publications…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#1a1a2e]/80 border border-[#00f5ff]/20 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-[#00f5ff]/60 transition-colors"
+              />
+            </div>
+
+            {/* Category filter */}
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all duration-200 ${
+                    activeCategory === cat
+                      ? "bg-[#00f5ff]/20 border-[#00f5ff]/60 text-[#00f5ff]"
+                      : "bg-[#1a1a2e]/60 border-[#00f5ff]/10 text-gray-400 hover:border-[#00f5ff]/30 hover:text-white"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Results count */}
+          <motion.p
+            variants={fadeIn}
+            initial="hidden"
+            animate="visible"
+            className="text-gray-500 text-sm mb-6"
+          >
+            Showing {filtered.length} of {publications.length} publications
+          </motion.p>
+
+          {/* Publication list */}
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            className="space-y-4"
+          >
+            {filtered.length === 0 ? (
+              <motion.div variants={fadeInUp} className="text-center py-20 text-gray-500">
+                <FileText className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                <p>No publications match your search.</p>
+              </motion.div>
+            ) : (
+              filtered.map((pub) => (
+                <motion.div
+                  key={pub.id}
+                  variants={fadeInUp}
+                  whileHover={{ x: 4 }}
+                  className="group relative rounded-2xl border border-[#1a1a2e] hover:border-[#00f5ff]/30 bg-[#1a1a2e]/60 hover:bg-[#1a1a2e]/80 backdrop-blur-sm p-6 transition-all duration-300"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+                    {/* Icon */}
+                    <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-[#00f5ff]/20 to-[#7b2fff]/20 border border-[#00f5ff]/20 flex items-center justify-center">
+                      <FileText className="w-5 h-5 text-[#00f5ff]" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${categoryColors[pub.category] ?? "text-gray-400 border-gray-400/40 bg-gray-400/10"}`}>
+                          {pub.category}
+                        </span>
+                        {pub.featured && (
+                          <span className="text-xs font-medium px-2 py-0.5 rounded-full border border-yellow-400/40 bg-yellow-400/10 text-yellow-400">
+                            ★ Featured
+                          </span>
+                        )}
+                        <span className="text-gray-500 text-xs flex items-center gap-1 ml-auto">
+                          <Calendar className="w-3 h-3" />
+                          {pub.year}
+                        </span>
+                      </div>
+
+                      <h3 className="font-orbitron text-sm font-bold text-white mb-1 group-hover:text-[#00f5ff] transition-colors leading-snug">
+                        {pub.title}
+                      </h3>
+
+                      <p className="text-[#00f5ff] text-xs mb-1">{pub.authors}</p>
+                      <p className="text-gray-500 text-xs italic mb-3">{pub.venue}</p>
+                      <p className="text-gray-400 text-sm leading-relaxed mb-4">{pub.abstract}</p>
+
+                      <div className="flex flex-wrap items-center gap-2">
+                        {pub.tags.map((tag) => (
+                          <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-[#7b2fff]/10 text-[#7b2fff] border border-[#7b2fff]/20">
+                            <Tag className="w-2.5 h-2.5 inline mr-1" />
+                            {tag}
+                          </span>
+                        ))}
+                        <a
+                          href={pub.link}
+                          className="ml-auto inline-flex items-center gap-1 text-xs text-[#00f5ff] hover:text-white transition-colors"
+                        >
+                          View <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            )}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <motion.div
+            variants={scaleIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="relative rounded-3xl border border-[#00f5ff]/20 bg-gradient-to-br from-[#1a1a2e]/80 to-[#0f0f1a]/80 backdrop-blur-sm p-10 text-center overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-[#00f5ff]/5 to-[#7b2fff]/5" />
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00f5ff]/50 to-transparent" />
+
+            <div className="relative z-10">
+              <BookOpen className="w-10 h-10 text-[#00f5ff] mx-auto mb-4" />
+              <h2 className="font-orbitron text-2xl font-bold text-white mb-3">
+                Want to Collaborate?
+              </h2>
+              <p className="text-gray-400 mb-6 max-w-lg mx-auto">
+                I'm always open to co-authoring research, speaking at conferences, or contributing
+                technical articles on QA and software quality topics.
+              </p>
+              <Link
+                href="/#about"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#00f5ff] to-[#7b2fff] text-[#0f0f1a] font-bold text-sm hover:opacity-90 transition-opacity"
+              >
+                Get in Touch
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }
