@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { Code2 as Github, Briefcase as Linkedin, MessageCircle as Twitter, Mail, ArrowUp } from 'lucide-react';
-import { navLinks, BRAND } from "@/lib/data";
+import { navLinks, pageLinks, BRAND } from "@/lib/data";
 import { fadeInUp, staggerContainer } from "@/lib/motion";
 
 const socialLinks = [
@@ -53,10 +53,10 @@ export default function Footer() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16"
+          className="grid grid-cols-1 md:grid-cols-4 gap-10 lg:gap-12"
         >
           {/* Brand column */}
-          <motion.div variants={fadeInUp} className="space-y-4">
+          <motion.div variants={fadeInUp} className="md:col-span-1 space-y-4">
             <Link href="/" className="flex items-center gap-2 group w-fit">
               <div className="relative w-9 h-9">
                 <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#00f5ff] to-[#7b2fff] opacity-70 blur-sm group-hover:opacity-100 transition-opacity" />
@@ -82,7 +82,7 @@ export default function Footer() {
             </div>
           </motion.div>
 
-          {/* Nav links */}
+          {/* Main nav links */}
           <motion.div variants={fadeInUp} className="space-y-4">
             <h3 className="font-orbitron text-sm font-semibold text-[#00f5ff] tracking-widest uppercase">
               Navigation
@@ -93,9 +93,8 @@ export default function Footer() {
                   <Link
                     href={getLinkHref(link.href)}
                     onClick={(e) => handleAnchorClick(e, link.href)}
-                    className="text-gray-400 hover:text-[#00f5ff] text-sm transition-colors duration-200 flex items-center gap-2 group"
+                    className="text-gray-400 hover:text-white text-sm transition-colors duration-200 hover:translate-x-1 inline-block"
                   >
-                    <span className="w-0 group-hover:w-3 h-px bg-[#00f5ff] transition-all duration-200" />
                     {link.label}
                   </Link>
                 </li>
@@ -103,29 +102,47 @@ export default function Footer() {
             </ul>
           </motion.div>
 
-          {/* Contact / Social */}
+          {/* Pages links */}
           <motion.div variants={fadeInUp} className="space-y-4">
             <h3 className="font-orbitron text-sm font-semibold text-[#7b2fff] tracking-widest uppercase">
+              Pages
+            </h3>
+            <ul className="space-y-2">
+              {pageLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-400 hover:text-white text-sm transition-colors duration-200 hover:translate-x-1 inline-block"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Social links */}
+          <motion.div variants={fadeInUp} className="space-y-4">
+            <h3 className="font-orbitron text-sm font-semibold text-[#00f5ff] tracking-widest uppercase">
               Connect
             </h3>
-            <p className="text-gray-400 text-sm">{BRAND.email}</p>
-            <p className="text-gray-400 text-sm">{BRAND.location}</p>
-            <div className="flex items-center gap-3 pt-1">
+            <ul className="space-y-3">
               {socialLinks.map(({ icon: Icon, href, label }) => (
-                <motion.a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  whileHover={{ scale: 1.15, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#00f5ff] hover:border-[#00f5ff]/40 hover:bg-[#00f5ff]/5 transition-colors duration-200"
-                >
-                  <Icon size={16} />
-                </motion.a>
+                <li key={label}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-gray-400 hover:text-white text-sm transition-all duration-200 group"
+                  >
+                    <span className="w-8 h-8 rounded-lg bg-[#1a1a2e] border border-[#00f5ff]/10 flex items-center justify-center group-hover:border-[#00f5ff]/40 group-hover:bg-[#00f5ff]/10 transition-all duration-200">
+                      <Icon size={14} />
+                    </span>
+                    {label}
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
           </motion.div>
         </motion.div>
 
@@ -135,25 +152,22 @@ export default function Footer() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4"
+          className="mt-12 pt-8 border-t border-[#00f5ff]/10 flex flex-col sm:flex-row items-center justify-between gap-4"
         >
-          <p className="text-gray-500 text-xs text-center sm:text-left">
-            © {new Date().getFullYear()} {BRAND.name}. Built with{" "}
-            <span className="text-[#00f5ff]">Next.js</span> &{" "}
-            <span className="text-[#7b2fff]">React Three Fiber</span>.
+          <p className="text-gray-500 text-sm">
+            © {new Date().getFullYear()}{" "}
+            <span className="text-[#00f5ff]">{BRAND.name}</span>. All rights
+            reserved.
           </p>
-          <motion.button
+          <button
             onClick={scrollToTop}
-            whileHover={{ scale: 1.1, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-2 text-xs text-gray-500 hover:text-[#00f5ff] transition-colors duration-200 group"
-            aria-label="Scroll to top"
+            className="flex items-center gap-2 text-gray-500 hover:text-[#00f5ff] text-sm transition-colors duration-200 group"
           >
-            <span>Back to top</span>
-            <span className="w-6 h-6 rounded-md bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-[#00f5ff]/40 group-hover:bg-[#00f5ff]/5 transition-colors">
+            Back to top
+            <span className="w-7 h-7 rounded-full border border-[#00f5ff]/20 flex items-center justify-center group-hover:border-[#00f5ff]/60 group-hover:bg-[#00f5ff]/10 transition-all duration-200">
               <ArrowUp size={12} />
             </span>
-          </motion.button>
+          </button>
         </motion.div>
       </div>
     </footer>

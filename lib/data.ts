@@ -40,8 +40,7 @@ export const BRAND = {
 } as const;
 
 // ─── Navigation (single source of truth) ────────────────────────────────────
-// All non-home entries are on-page section anchors (#) so they work
-// from the homepage without requiring separate route pages.
+// Main site links (on-page anchors for homepage sections)
 export const navLinks: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "About", href: "#about" },
@@ -49,7 +48,12 @@ export const navLinks: NavLink[] = [
   { label: "Projects", href: "#projects" },
   { label: "Experience", href: "#experience" },
   { label: "Certifications", href: "#certifications" },
+];
+
+// Separate pages navigation (distinct routes)
+export const pageLinks: NavLink[] = [
   { label: "Publications", href: "/publications" },
+  { label: "Blog", href: "/blog" },
 ];
 
 // ─── Primary CTA ─────────────────────────────────────────────────────────────
